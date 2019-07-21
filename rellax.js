@@ -27,7 +27,6 @@
     "use strict";
 
     var self = Object.create(Rellax.prototype);
-
     var posY = 0;
     var screenY = 0;
     var posX = 0;
@@ -84,7 +83,6 @@
       relativeToWrapper: false,
       round: true,
       vertical: true,
-      horizontal: false,
       callback: function() {},
     };
 
@@ -173,6 +171,8 @@
       var dataZindex = el.getAttribute( 'data-rellax-zindex' ) || 0;
       var dataMin = el.getAttribute( 'data-rellax-min' );
       var dataMax = el.getAttribute( 'data-rellax-max' );
+      var horizontal = el.getAttribute( 'data-rellax-horizontal' );
+      var rotate = el.getAttribute( 'data-rellax-rotate' );
 
       // initializing at scrollY = 0 (top of browser), scrollX = 0 (left of browser)
       // ensures elements are positioned based on HTML layout.
@@ -239,7 +239,8 @@
         transform: transform,
         zindex: dataZindex,
         min: dataMin,
-        max: dataMax
+        max: dataMax,
+        rotate: rotate
       };
     };
 
@@ -356,10 +357,15 @@
         }
 
         var zindex = blocks[i].zindex;
-
+        var translate;
         // Move that element
         // (Set the new translation and append initial inline transforms.)
-        var translate = 'translate3d(' + (self.options.horizontal ? positionX : '0') + 'px,' + (self.options.vertical ? positionY : '0') + 'px,' + zindex + 'px) ' + blocks[i].transform;
+        if (blocks[i].rotate) {
+          translate = 'rotate('+positionY +'deg)';
+        } else {
+          translate = 'translate3d(' + (blocks[i].horizontal ? positionY : '0') + 'px,' + (blocks[i].horizontal ? '0' : positionY) + 'px,' + zindex + 'px) ' + blocks[i].transform;
+        }
+        
         self.elems[i].style[transformProp] = translate;
       }
       self.options.callback(positions);
