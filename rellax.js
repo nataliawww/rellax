@@ -240,7 +240,8 @@
         zindex: dataZindex,
         min: dataMin,
         max: dataMax,
-        rotate: rotate
+        rotate: rotate,
+        horizontal: horizontal
       };
     };
 
